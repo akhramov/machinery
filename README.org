@@ -1,0 +1,54 @@
+**** What's that?
+Nothing interesting.
+This service accepts [[https://vk.com/][VK]] group updates via webhooks, scans a [[https://mega.nz][Mega]]
+folder for updates and matches VK updates with Mega updates using
+Jaro-Winkler algorithm. Scanning is performed against +text content+ on
+VK side and +file name+ on mega side.
+
+Thus we have VK posts matched with Mega.nz links. What next?\\
+Huh. Here comes [[https://telegram.org/][Telegram]] into the play.
+
+Let's suppose you have a channel and you want to send aggregated
+updates from VK / Mega there. Or you want to have an inline bot which
+lists these updates and allows user share their publications with
+others. Maybe both? This might fit your needs.
+
+**** Real world
+You are an OSS game developer. You host your games on Mega,
+but want to have updates in VK, and have a TG channel with fancy bot
+which will allow your fans to query the mega archive.
+
+You are a photographer, you have a VK group. You upload whole high
+resolution sets to Mega, but also want to give updates to a TG
+channel, and think that inline bot will help you and your friends find
+and download your photosets faster.
+
+**** Requirements
+
+- JRE 8+
+- [[https://github.com/megous/megatools][megatools]] for querying Mega.
+- [[https://github.com/mongodb/mongo][Mongo]] for storing results
+
+**** Configuration
+
+This package is configured using env variables
+
+#+BEGIN_SRC shell
+SERVER_ROOT=https://x.com # Your domain. TG and VK will send updates here.
+TG_URI=/telegram/abcdef2  # Root for the TG webhook.
+TG_TOKEN=199134443:xxxxx  # Telegram token. Obtain one from @BotFather
+TG_RESULTS_PER_PAGE=20    # Results per page in inline query.
+TG_CHANNEL_ID=@mychannel  # Channel there your updates will get posted to.
+VK_GROUP_ID="-94939494"   # VK group to spy on.
+VK_URI=/vk/rirfier        # Root for the VK webhook.
+VK_RESPONSE=d4030444      # Handshake response
+VK_APP_ID=6348389         # VK App id.
+VK_POST_URL_FORMAT="https://vk.com/wall%s_%s" # VK post URL format. Not to be changed.
+VK_SERVICE_KEY=fa959328f  # VK App service key
+MEGA_FOLDER="/Root/My Photos" # Mega folder to look into.
+MEGA_EMAIL=foo@example.com    # Mega usernama
+MEGA_PASSWORD=foobar42        # Mega password
+MEGA_FILE_REGEX=".*https.*\\.zip|\\.rar$" # Mega entry pattern
+MEGA_EXECUTABLE="/usr/bin/megals" # Path to megals executable (shipped with megatools)
+JARO_WINKLER_COEF=0.95 # Tackling typos.
+#+END_SRC
